@@ -1,0 +1,11 @@
+<div class="section" id="solar_position">
+    <h2>Sonnenposition</h2>
+    <div id="solar_position_display">
+        <div>Sun Azimuth: <span id="sun_azimuth_value">0</span></div>
+        <div>Sun Elevation: <span id="sun_elevation_value"></span></div>
+    </div>
+</div>
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='SolarPosition.js') }}"></script>
+{% endblock %}

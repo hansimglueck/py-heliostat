@@ -1,109 +1,12 @@
-<!DOCTYPE html>
-<html lang="de">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Sonnenstand und Heliostat Steuerung</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
-        <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header">
-                <h1>Heliostat</h1>
-            </div>
-            <div class="section" id="solar_position">
-                <h2>Sonnenposition</h2>
-                <div id="solar_position_display">
-                    <div>Sun Azimuth: <span id="sun_azimuth_value">0</span></div>
-                    <div>Sun Elevation: <span id="sun_elevation_value"></span></div>
-                </div>
-            </div>
-            <div class="section" id="heliostat_control">
-                <h2>Heliostat Steuerung</h2>
-                <div id="heliostat_status">
-                    <div>Heliostat Azimuth: <span id="heliostat_azimuth_value">{{ heliostat_direction['azimuth'] }}</span></div>
-                    <div>Heliostat Elevation: <span id="heliostat_elevation_value">{{ heliostat_direction['elevation'] }}</span></div>
-                </div>
-                <div class="control-container">
-                    <div class="control-slider">
-                        <div class="control-row">
-                            <button id="increase-step">More</button>
-                        </div>
-                        <div class="control-row">
-                            <button id="decrease-step">Less</button>
-                        </div>
-                        <p id="step-size-value">1.00 °</p>
-                    </div>
-                    <div class="control-panel">
-                        <div class="control-row">
-                            <button class="direction-btn" data-direction="up">Up</button>
-                        </div>
-                        <div class="control-row">
-                            <button class="direction-btn" data-direction="left">Left</button>
-                            <button class="direction-btn" data-direction="right">Right</button>
-                        </div>
-                        <div class="control-row">
-                            <button class="direction-btn" data-direction="down">Down</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- index.html -->
+{% extends "base.html" %}
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const socket = io();
-                const stepSizes = [0.01, 0.1, 1, 10];
-                let currentStepIndex = 2; // Startet bei 1, was '1 Grad' entspricht
-
-                const stepValueDisplay = document.getElementById('step-size-value');
-                const increaseButton = document.getElementById('increase-step');
-                const decreaseButton = document.getElementById('decrease-step');
-
-                // Funktion zum Aktualisieren der Schrittgröße-Anzeige
-                function updateStepSizeDisplay() {
-                    stepValueDisplay.textContent = stepSizes[currentStepIndex].toFixed(2) + ' °';
-                }
-
-                // Event-Listener für den "More"-Button
-                increaseButton.addEventListener('click', function () {
-                    if (currentStepIndex < stepSizes.length - 1) {
-                        currentStepIndex++;
-                        updateStepSizeDisplay();
-                    }
-                });
-
-                // Event-Listener für den "Less"-Button
-                decreaseButton.addEventListener('click', function () {
-                    if (currentStepIndex > 0) {
-                        currentStepIndex--;
-                        updateStepSizeDisplay();
-                    }
-                });
-
-                // Setzt den initialen Wert der Anzeige
-                updateStepSizeDisplay();
-
-                socket.on('update_heliostat', function (data) {
-                    document.getElementById('heliostat_azimuth_value').textContent = data.azimuth.toFixed(2);
-                    document.getElementById('heliostat_elevation_value').textContent = data.elevation.toFixed(2);
-                    console.log('update_heliostat ' + data);
-                });
-
-                socket.on('solar_position', function (data) {
-                    document.getElementById('sun_azimuth_value').textContent = data.azimuth.toFixed(2);
-                    document.getElementById('sun_elevation_value').textContent = data.elevation.toFixed(2);
-                });
-
-                document.querySelectorAll('.direction-btn').forEach(button => {
-                    button.addEventListener('click', function () {
-                        socket.emit('change_direction', {
-                            direction: this.getAttribute('data-direction'),
-                            step: stepSizes[currentStepIndex],
-                        });
-                    });
-                });
-            });
-        </script>
-    </body>
-</html>
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>Heliostat</h1>
+    </div>
+    {% include 'solar_position.html' %}
+    {% include 'heliostat_control.html' %}
+</div>
+{% endblock %}

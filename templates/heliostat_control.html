@@ -1,0 +1,35 @@
+<div class="section" id="heliostat_control">
+    <h2>Heliostat Steuerung</h2>
+    <div id="heliostat_status">
+        <div>Heliostat Azimuth: <span id="heliostat_azimuth_value">180</span></div>
+        <div>Heliostat Elevation: <span id="heliostat_elevation_value">45</span></div>
+    </div>
+    <div class="control-container">
+        <div class="control-slider">
+            <div class="control-row">
+                <button id="increase-step">More</button>
+            </div>
+            <div class="control-row">
+                <button id="decrease-step">Less</button>
+            </div>
+            <p id="step-size-value">1.00 °</p>
+        </div>
+        <div class="control-panel">
+            <div class="control-row">
+                <button class="direction-btn" data-direction="up">Up</button>
+            </div>
+            <div class="control-row">
+                <button class="direction-btn" data-direction="left">Left</button>
+                <button class="direction-btn" data-direction="right">Right</button>
+            </div>
+            <div class="control-row">
+                <button class="direction-btn" data-direction="down">Down</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='HeliostatControl.js') }}"></script>
+<script src="{{ url_for('static', filename='StepSizeControl.js') }}"></script>
+{% endblock %}
