@@ -1,0 +1,12 @@
+{
+    "printWidth": 220,  
+    "tabWidth": 4,
+    "useTabs": false,
+    "singleQuote": true,
+    "htmlWhitespaceSensitivity": "css",
+    "wrapAttributes": "force-aligned",
+    "proseWrap": "preserve",
+    "semi": true,
+    "arrowParens": "avoid"  
+  }
+  

@@ -13,7 +13,7 @@ heliostat_direction = {'azimuth': 180, 'elevation': 45}
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', heliostat_direction=heliostat_direction)
 
 @socketio.on('connect')
 def on_connect():
@@ -32,6 +32,7 @@ def emit_solar_position():
 def handle_change_direction(message):
     global heliostat_direction
     step = float(message['step'])  # Step size from the client
+    print(step)
     if message['direction'] == 'up':
         heliostat_direction['elevation'] += step
     elif message['direction'] == 'down':
@@ -49,4 +50,4 @@ def get_solar_position():
     return solpos.iloc[0]
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, host='0.0.0.0', port=80)
