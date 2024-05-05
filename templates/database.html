@@ -1,0 +1,24 @@
+<div class="section" id="heliostat_control">
+    <h2>Positionen</h2>
+    <button id="saveDataButton">Daten speichern</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Auswählen</th>
+                <th>Solar Azimuth</th>
+                <th>Solar Elevation</th>
+                <th>Heliostat Azimuth</th>
+                <th>Heliostat Elevation</th>
+                <th>Löschen</th>
+            </tr>
+        </thead>
+        <tbody id="positions_body">
+            <!-- Positionen werden hier eingefügt -->
+        </tbody>
+    </table>
+</div>
+
+    {% block scripts %}
+    <script src="{{ url_for('static', filename='Database.js') }}"></script>
+    {% endblock %}
+

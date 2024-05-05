@@ -1,19 +1,31 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
-import pvlib
-from datetime import datetime
-from pytz import timezone
+from models import db, Position, init_app
+from heliostat_state import HeliostatState
+from solar_position import SolarPosition
+import database_routes
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+init_app(app)
 app.config['DEBUG'] = True
 socketio = SocketIO(app)
 
 # Heliostat initial position
-heliostat_direction = {'azimuth': 180, 'elevation': 45}
+# heliostat_direction = {'azimuth': 180, 'elevation': 45}
+
+database_routes.setup_routes(socketio)  # Initialisiere Socket.IO-Events
+
+
+latitude, longitude = 52.7636, 13.6495  # Biesenthal coordinates
+SolarPosition.initialize(latitude, longitude, tz='Europe/Berlin')
+
 
 @app.route('/')
 def index():
-    return render_template('index.html', heliostat_direction=heliostat_direction)
+    positions = Position.query.all()
+    return render_template('index.html', heliostat_direction=HeliostatState.get_direction(), positions=positions)
 
 @socketio.on('connect')
 def on_connect():
@@ -25,7 +37,7 @@ def background_solar_position():
         socketio.sleep(10)  # Pause for 10 seconds
 
 def emit_solar_position():
-    position = get_solar_position()
+    position = SolarPosition.get_position()
     socketio.emit('solar_position', {'azimuth': position['azimuth'], 'elevation': position['elevation']})
 
 @socketio.on('change_direction')
@@ -34,20 +46,23 @@ def handle_change_direction(message):
     step = float(message['step'])  # Step size from the client
     print(step)
     if message['direction'] == 'up':
-        heliostat_direction['elevation'] += step
+        HeliostatState.adjust_elevation(step)
     elif message['direction'] == 'down':
-        heliostat_direction['elevation'] -= step
+        HeliostatState.adjust_elevation(-step)
     elif message['direction'] == 'left':
-        heliostat_direction['azimuth'] -= step
+        HeliostatState.adjust_azimuth(-step)
     elif message['direction'] == 'right':
-        heliostat_direction['azimuth'] += step
-    socketio.emit('update_heliostat', heliostat_direction)
+        HeliostatState.adjust_azimuth(step)
+        
+    socketio.emit('update_heliostat', HeliostatState.get_direction())
 
-def get_solar_position():
-    latitude, longitude = 52.7636, 13.6495  # Biesenthal coordinates
-    tz = timezone('Europe/Berlin')
-    solpos = pvlib.solarposition.get_solarposition(datetime.now(tz), latitude, longitude)
-    return solpos.iloc[0]
+
+
+
+# def create_tables():
+#     with app.app_context():
+#         db.create_all()
 
 if __name__ == '__main__':
+    # create_tables()
     socketio.run(app, host='0.0.0.0', port=80)
