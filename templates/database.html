@@ -18,7 +18,6 @@
     </table>
 </div>
 
-    {% block scripts %}
-    <script src="{{ url_for('static', filename='Database.js') }}"></script>
-    {% endblock %}
-
+{% block scripts %}
+<script src="{{ url_for('static', filename='Database.js') }}"></script>
+{% endblock %}

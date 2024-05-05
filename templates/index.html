@@ -1,13 +1,9 @@
 <!-- index.html -->
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="container">
     <div class="header">
         <h1>Heliostat</h1>
     </div>
-    {% include 'database.html' %}
-    {% include 'solar_position.html' %}
-    {% include 'heliostat_control.html' %}
+    {% include 'database.html' %} {% include 'solar_position.html' %} {% include 'heliostat_control.html' %}
 </div>
 {% endblock %}

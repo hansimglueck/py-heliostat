@@ -30,15 +30,13 @@ h2 {
 
 p,
 button {
-  font-size: 36px;
-  padding: 10px;
-  /* font-size: 20px; */
+  padding: 5px;
+  font-size: 20px;
   color: #fff;
-  background-color: #007bff;
+  background-color: #818181;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-
 }
 
 .container {
