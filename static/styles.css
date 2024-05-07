@@ -1,5 +1,7 @@
 body {
   font-family: "Arial", sans-serif;
+  font-size: 24px;
+
   margin: 0;
   padding: 0;
   background-color: #f4f4f4;
@@ -144,4 +146,28 @@ button {
     width: 40px;
     height: 40px;
   }
+}
+
+#preview {
+  width: 75%; /* oder eine andere passende Breite */
+  height: 600px; /* oder eine andere passende Höhe */
+  margin: auto; /* Zentriert das Div auf der Seite */
+}
+
+
+#azimuthContainer, #elevationContainer {
+  margin-bottom: 10px;
+}
+
+input[type="number"] {
+  width: 80px;
+}
+
+input[type="text"] {
+  font-size: 24px; /* Größere Schriftgröße für bessere Lesbarkeit */
+  width: 100px; /* Passende Breite, kann je nach Bedarf angepasst werden */
+  padding: 5px; /* Mehr Platz im Inneren des Feldes */
+  margin: 5px 0; /* Abstand oben und unten */
+  border: 1px solid #ccc; /* Dezente Rahmenfarbe */
+  border-radius: 4px; /* Abgerundete Ecken */
 }

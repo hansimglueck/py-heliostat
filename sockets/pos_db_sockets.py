@@ -80,3 +80,4 @@ def register_database_sockets(socketio):
         emit(
             "selected_positions_deleted", {"selected_ids": selected_ids}, broadcast=True
         )
+
